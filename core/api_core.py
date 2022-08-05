@@ -1,9 +1,8 @@
 from dataclasses import dataclass
-from requests import ConnectionError
 
 import requests
 
-from resources.utils.custom_strings import error_name
+from utils.custom_strings import error_name
 
 
 @dataclass
@@ -20,7 +19,7 @@ class APIRequest:
             response = requests.get(url)
             return self.__get_successful_response(response)
 
-        except ConnectionError as error:
+        except Exception as error:
             return self.__get_unsuccessful_response(error)
 
     def post(self, url, payload, headers):
@@ -28,7 +27,7 @@ class APIRequest:
             response = requests.post(url, data=payload, headers=headers)
             return self.__get_successful_response(response)
 
-        except ConnectionError as error:
+        except Exception as error:
             return self.__get_unsuccessful_response(error)
 
     def delete(self, url):
@@ -36,7 +35,7 @@ class APIRequest:
             response = requests.delete(url)
             return self.__get_successful_response(response)
 
-        except ConnectionError as error:
+        except Exception as error:
             return self.__get_unsuccessful_response(error)
 
     @staticmethod
