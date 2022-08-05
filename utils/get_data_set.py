@@ -1,31 +1,26 @@
 from json import dumps
-from faker import Faker
 
-import random
-
-fake_data = Faker()
+from resources.random_data import *
 
 
-def get_pet():
-    pet_id = random.randint(0, 9999)
+def get_pet(photoUrls_amount=-1):
+    pet_id = get_random_number()
     payload = dumps(
                 {
                     "id": pet_id,
                     "category": {
-                        "id": random.randint(0, 9999),
-                        "name": fake_data.name()
+                        "id": get_random_number(),
+                        "name": get_random_name()
                     },
-                    "name": random.choice([fake_data.first_name(), fake_data.name()]),
-                    "photoUrls": [
-                        "Facha"
-                    ],
+                    "name": get_random_name(),
+                    "photoUrls": get_random_list_of_names(photoUrls_amount),
                     "tags": [
                         {
-                            "id": random.randint(0, 9999),
-                            "name": random.choice([fake_data.first_name(), fake_data.name()])
+                            "id": get_random_number(),
+                            "name": get_random_name()
                         }
                     ],
-                    "status": random.choice(["available", "pending", "sold"])
+                    "status": get_random_element(["available", "pending", "sold"])
                 }
             )
     return pet_id, payload

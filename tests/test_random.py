@@ -3,6 +3,8 @@ from assertpy import assert_that
 from faker import Faker
 from utils.get_data_set import get_pet
 import requests
+import random
+from resources.random_data import get_random_list_of_names
 
 fake_data = Faker()
 request = APIRequest()
@@ -32,4 +34,11 @@ def test_type():
 
 def test_names():
     print(get_pet())
+    print(get_pet(0))
 
+
+def test_random_list():
+    randomlist = random.sample([fake_data.first_name(), fake_data.name()], random.randint(0, 2))
+    print(randomlist)
+    list_names = get_random_list_of_names(8)
+    print(list_names)
