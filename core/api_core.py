@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from json import JSONDecodeError
 
 import requests
 
@@ -19,7 +20,7 @@ class APIRequest:
             response = requests.get(url)
             return self.__get_successful_response(response)
 
-        except Exception as error:
+        except ConnectionError as error:
             return self.__get_unsuccessful_response(error)
 
     def post(self, url, payload, headers):
@@ -27,7 +28,7 @@ class APIRequest:
             response = requests.post(url, data=payload, headers=headers)
             return self.__get_successful_response(response)
 
-        except Exception as error:
+        except ConnectionError as error:
             return self.__get_unsuccessful_response(error)
 
     def delete(self, url):
@@ -35,7 +36,7 @@ class APIRequest:
             response = requests.delete(url)
             return self.__get_successful_response(response)
 
-        except Exception as error:
+        except ConnectionError as error:
             return self.__get_unsuccessful_response(error)
 
     @staticmethod
@@ -45,7 +46,7 @@ class APIRequest:
 
         try:
             as_dict = response.json()
-        except Exception:
+        except JSONDecodeError:
             as_dict = {}
 
         headers = response.headers

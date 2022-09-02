@@ -1,6 +1,6 @@
 from json import dumps
 
-from resources.random_data import *
+from resources.random_data_generator import *
 
 
 def get_pet(photoUrls_amount=-1):
