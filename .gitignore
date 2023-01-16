@@ -1,6 +1,8 @@
 .idea
+.pytest_cache/
+__pycache__/
 core/__pycache__/
 resources/__pycache__/
 utils/__pycache__/
-__pycache__/
 helpers/__pycache__/
+venv/
