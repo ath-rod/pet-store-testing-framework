@@ -1,0 +1,4 @@
+pytest
+assertpy
+requests
+Faker
