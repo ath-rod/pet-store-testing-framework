@@ -9,59 +9,36 @@ from utils.custom_strings import error_name
 @dataclass
 class Response:
     status_code: int
-    text: str
-    as_dict: object
+    text: str  # TODO: investigate why renaming causes failure, rename to body_as_raw
+    body_as_dict: object
     headers: dict
 
 
 class APIRequest:
     def get(self, url):
-        try:
-            response = requests.get(url)
-            return self.__get_successful_response(response)
-
-        except ConnectionError as error:
-            return self.__get_unsuccessful_response(error)
+        response = requests.get(url)
+        return self.__get_response_data(response)
 
     def post(self, url, payload, headers):
-        try:
-            response = requests.post(url, data=payload, headers=headers)
-            return self.__get_successful_response(response)
-
-        except ConnectionError as error:
-            return self.__get_unsuccessful_response(error)
+        response = requests.post(url, data=payload, headers=headers)
+        return self.__get_response_data(response)
 
     def delete(self, url):
-        try:
-            response = requests.delete(url)
-            return self.__get_successful_response(response)
-
-        except ConnectionError as error:
-            return self.__get_unsuccessful_response(error)
+        response = requests.delete(url)
+        return self.__get_response_data(response)
 
     @staticmethod
-    def __get_successful_response(response):
+    def __get_response_data(response):
         status_code = response.status_code
-        text = response.text
-
-        try:
-            as_dict = response.json()
-        except JSONDecodeError:
-            as_dict = {}
-
+        body_as_raw = response.text
         headers = response.headers
 
-        return Response(
-            status_code, text, as_dict, headers
-        )
-
-    @staticmethod
-    def __get_unsuccessful_response(error):
-        status_code = 0
-        text = error_name(error)
-        as_dict = {'error type': error_name(error)}
-        headers = {}
+        try:
+            body_as_dict = response.json()
+        except JSONDecodeError as error:  # TODO: research how to clean this
+            raise Exception(f"{error_name(error)} raised from status code {status_code}, headers: {headers},"
+                            f"and body {body_as_raw}")
 
         return Response(
-            status_code, text, as_dict, headers
+            status_code, body_as_raw, body_as_dict, headers
         )
