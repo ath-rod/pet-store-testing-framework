@@ -37,6 +37,5 @@ class PetWrapper(BaseWrapper):
         url = f'{self.base_url}/{pet_id}'
         return self.request.delete(url)
 
-    def put_pet_by_id(self, pet_id, payload: dict) -> object:
-        url = f'{self.base_url}/{pet_id}'
-        return self.request.put(url, dumps(payload), self.headers)
+    def put_pet(self, payload: dict) -> object:
+        return self.request.put(self.base_url, dumps(payload), self.headers)

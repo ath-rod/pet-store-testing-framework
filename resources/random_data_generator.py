@@ -18,7 +18,10 @@ def get_random_name():
 
 
 def get_random_list_of_names(quantity=get_random_number()):
-    list_of_names = []
-    for _ in range(quantity):
-        list_of_names.append(random.choice([fake_data.first_name(), fake_data.name()]))
+    list_of_names = [random.choice([fake_data.first_name(), fake_data.name()]) for _ in range(quantity)]
     return list_of_names
+
+
+def get_random_list_of_strings(quantity=get_random_number()):
+    list_of_strings = [fake_data.pystr() for _ in range(quantity)]
+    return list_of_strings

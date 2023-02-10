@@ -7,5 +7,5 @@ class BaseWrapper:
         self.headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'api_key': 'special-key'
+            'api_key': 'athziri'
         }

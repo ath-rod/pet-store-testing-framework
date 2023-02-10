@@ -11,8 +11,7 @@ def generate_pet(pet_id=None):
             "name": random_data_generator.get_random_name()
         },
         "name": random_data_generator.get_random_name(),
-        # TODO: consider changing strings as names
-        "photoUrls": random_data_generator.get_random_list_of_names(),
+        "photoUrls": random_data_generator.get_random_list_of_strings(),
         "tags": [
             {
                 "id": random_data_generator.get_random_number(),
