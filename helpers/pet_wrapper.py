@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from json import dumps
+from pprint import pprint
 
 from base_wrapper import BaseWrapper
 from core.api_core import APIRequest
@@ -24,6 +25,8 @@ class PetWrapper(BaseWrapper):
             payload = generate_pet()
         pet_id = payload['id']
         response = self.request.post(self.base_url, dumps(payload), self.headers)
+        print("\n!!!POST PET:")
+        pprint(response)
 
         return Request(
             self.headers, payload, response, pet_id
@@ -31,11 +34,20 @@ class PetWrapper(BaseWrapper):
 
     def get_pet_by_id(self, pet_id) -> object:
         url = f'{self.base_url}/{pet_id}'
-        return self.request.get(url)
+        response = self.request.get(url)
+        print("\n!!!GET PET:")
+        pprint(response)
+        return response
 
     def delete_pet_by_id(self, pet_id) -> object:
         url = f'{self.base_url}/{pet_id}'
-        return self.request.delete(url)
+        response = self.request.delete(url)
+        print("\n!!!DELETE PET:")
+        pprint(response)
+        return response
 
     def put_pet(self, payload: dict) -> object:
-        return self.request.put(self.base_url, dumps(payload), self.headers)
+        response = self.request.put(self.base_url, dumps(payload), self.headers)
+        print("\n!!!PUT PET:")
+        pprint(response)
+        return response
