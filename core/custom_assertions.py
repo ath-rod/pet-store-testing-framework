@@ -1,4 +1,6 @@
 from assertpy import soft_assertions, assert_that
+from cerberus import Validator
+from utils.get_schema import get_pet_schema
 
 
 def assert_dicts_are_equal(expected_dict, actual_dict, parent_path=""):
@@ -17,3 +19,14 @@ def assert_dicts_are_equal(expected_dict, actual_dict, parent_path=""):
                     pass  # Handled in first assert
         else:
             assert_that(actual_dict, f"{parent_path}").is_equal_to(expected_dict)
+
+
+def assert_response_schema(response, endpoint):
+    schema_validator = Validator()
+    schema_validator.require_all
+    match endpoint:
+        case "pet":
+            if schema_validator.validate(response, get_pet_schema) is False:
+                raise AssertionError(schema_validator.errors)
+        case _:
+            raise Exception("Endpoint still not available for schema testing")

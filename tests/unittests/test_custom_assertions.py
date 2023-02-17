@@ -3,8 +3,9 @@ from random import shuffle
 from faker import Faker
 from pytest import raises
 
-from core.custom_assertions import assert_dicts_are_equal
+from core.custom_assertions import assert_dicts_are_equal, assert_response_schema
 from resources.random_data_generator import fake_data
+from utils.get_data_set import generate_pet
 
 fake_data = Faker()
 
@@ -67,3 +68,10 @@ def get_dict_with_dicts_inside_some_lists():
     for key in dict_random_lists:
         dict_with_dicts_inside_lists[key].append(fake_data.pydict())
     return dict_with_dicts_inside_lists
+
+
+class TestAssertSchema:
+    valid_pet_schema = generate_pet()
+
+    def test_valid_pet_schema(self):
+        assert_response_schema(self.valid_pet_schema, endpoint="pet")
