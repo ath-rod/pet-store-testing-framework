@@ -19,7 +19,7 @@ class TestAssertDictsAreEqual:
     def test_different_nested_dicts(self):
         """ As they are randomly generated they mostly test Actual dict doesn't contain[key]"""
         with raises(AssertionError):
-            assert_dicts_are_equal(self.nested_dict_a, self.nested_dict_bhat)
+            assert_dicts_are_equal(self.nested_dict_a, self.nested_dict_b)
 
     def test_same_nested_dicts_different_order(self):
         dict_keys = list(self.nested_dict_a.keys())
