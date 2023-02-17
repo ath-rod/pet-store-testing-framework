@@ -6,5 +6,6 @@ class BaseWrapper:
         self.base_url = f"{BASE_URI}/{url_path}"
         self.headers = {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'api_key': 'athziri'
         }
