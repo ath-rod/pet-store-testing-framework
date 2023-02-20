@@ -1,8 +1,8 @@
 get_pet_schema = {
-    'id': {'type': 'integer'},
+    'id': {'type': 'integer', 'min': 0},
     'category': {
         'type': 'dict',
-        'schema': {'id': {'type': 'integer'},
+        'schema': {'id': {'type': 'integer', 'min': 0},
                    'name': {'type': 'string'}}
     },
     'name': {'type': 'string'},
@@ -13,7 +13,7 @@ get_pet_schema = {
     'tags': {
         'type': 'list',
         'schema': {'type': 'dict',
-                   'schema': {'id': {'type': 'integer'},
+                   'schema': {'id': {'type': 'integer', 'min': 0},
                               'name': {'type': 'string'}}
                    }
     },
