@@ -6,6 +6,11 @@ fake_data = Faker()
 
 
 # region General Data Generator
+
+def get_random_bool():
+    return fake_data.boolean()
+
+
 def get_random_number(min_num=0, max_num=9999):
     return random.randint(min_num, max_num)
 
