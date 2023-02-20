@@ -2,7 +2,7 @@ import pytest
 from assertpy import assert_that, soft_assertions
 from requests import codes
 
-from core.custom_assertions import assert_dicts_are_equal
+from core.custom_assertions import assert_dicts_are_equal, assert_response_schema
 from helpers.pet_wrapper import PetWrapper
 from resources import random_data_generator
 from utils.get_data_set import generate_pet
@@ -29,6 +29,7 @@ def test_add_pet():
     }
     request = wrapper.post_pet(payload=payload)
     assert_that(request.response.status_code, request.response.body_as_raw).is_equal_to(codes.ok)
+    assert_response_schema(request.response.body_as_dict, endpoint="pet")
     assert_dicts_are_equal(request.payload, request.response.body_as_dict)
 
     response_get = wrapper.get_pet_by_id(request.pet_id)
@@ -39,6 +40,7 @@ def test_get_pet():
     request_new_pet = wrapper.post_pet()
     response = wrapper.get_pet_by_id(request_new_pet.pet_id)
     assert_that(response.status_code, response.body_as_raw).is_equal_to(codes.ok)
+    assert_response_schema(response.body_as_dict, endpoint="pet")
     assert_dicts_are_equal(request_new_pet.response.body_as_dict, response.body_as_dict)
 
 
@@ -59,11 +61,20 @@ def test_modify_pet():
     response = wrapper.put_pet(new_pet_data)
 
     assert_that(response.status_code, f"{response.body_as_raw} {response.headers}").is_equal_to(codes.ok)
+    assert_response_schema(response.body_as_dict, endpoint="pet")
     assert_that(response.body_as_dict['id']).is_equal_to(existing_pet.pet_id)
     assert_dicts_are_equal(response.body_as_dict, new_pet_data)
 
 
 @pytest.mark.xfail(reason="Fails due to bug 001")
+def test_add_empty_pet():
+    request = wrapper.post_pet(payload={})
+    with soft_assertions():
+        assert_that(request.response.status_code, "Response code").is_equal_to(codes.bad_request)
+        assert_that(request.response.body_as_dict).does_not_contain_key('id')
+
+
+@pytest.mark.xfail(reason="Fails due to bug 002")
 def test_add_already_existing_pet():
     existing_pet = wrapper.post_pet()
     new_pet_data = generate_pet(pet_id=existing_pet.pet_id)
@@ -73,10 +84,11 @@ def test_add_already_existing_pet():
 
     with soft_assertions():
         assert_that(request.response.status_code, "Response code").is_equal_to(codes.bad_request)
+        assert_response_schema(actual_pet.body_as_dict, endpoint="pet")
         assert_dicts_are_equal(existing_pet.response.body_as_dict, actual_pet.body_as_dict)
 
 
-@pytest.mark.xfail(reason="Fails due to bug 002")
+@pytest.mark.xfail(reason="Fails due to bug 003")
 @pytest.mark.parametrize("invalid_status", random_data_generator.get_invalid_status_data(), ids=repr)
 def test_modify_pet_with_invalid_status(invalid_status):
     existing_pet = wrapper.post_pet()
@@ -91,4 +103,5 @@ def test_modify_pet_with_invalid_status(invalid_status):
 
     with soft_assertions():
         assert_that(response.status_code, "Response code").is_equal_to(codes.bad_request)
+        # assert_response_schema(actual_pet.body_as_dict, endpoint="pet")  # TODO: fix only throws this error
         assert_that(actual_status).is_equal_to(expected_status)

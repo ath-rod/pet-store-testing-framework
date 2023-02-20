@@ -22,11 +22,10 @@ def assert_dicts_are_equal(expected_dict, actual_dict, parent_path=""):
 
 
 def assert_response_schema(response, endpoint):
-    schema_validator = Validator()
-    schema_validator.require_all
+    schema_validator = Validator(require_all=True)
     match endpoint:
         case "pet":
             if schema_validator.validate(response, get_pet_schema) is False:
                 raise AssertionError(schema_validator.errors)
         case _:
-            raise Exception("Endpoint still not available for schema testing")
+            raise Exception("Endpoint still not available for schema testing.")

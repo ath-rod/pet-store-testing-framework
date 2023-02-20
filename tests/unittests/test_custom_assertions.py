@@ -75,3 +75,61 @@ class TestAssertSchema:
 
     def test_valid_pet_schema(self):
         assert_response_schema(self.valid_pet_schema, endpoint="pet")
+
+    def test_random_invalid_dict(self):
+        with raises(AssertionError):
+            assert_response_schema(fake_data.pydict(value_types=dict), endpoint="pet")
+
+    def test_incomplete_pet_schema(self):
+        incomplete_dict = self.valid_pet_schema.copy()
+        random_keys = fake_data.random_elements(incomplete_dict.keys(), unique=True)
+        for key in random_keys:
+            incomplete_dict.pop(key)
+        with raises(AssertionError):
+            assert_response_schema(incomplete_dict, endpoint="pet")
+
+    def test_empty_pet_schema(self):
+        with raises(AssertionError):
+            assert_response_schema({}, endpoint="pet")
+
+    def test_invalid_type_integer_field(self):
+        invalid_dict = self.valid_pet_schema.copy()
+        invalid_data = fake_data.pylist(value_types=["boolean", "pyfloat", "str", "password"])
+        invalid_dict['id'] = fake_data.random_element(invalid_data)
+        invalid_dict['category']['id'] = fake_data.random_element(invalid_data)
+        invalid_dict['tags'][0]['id'] = fake_data.random_element(invalid_data)
+        with raises(AssertionError):
+            assert_response_schema(invalid_dict, endpoint="pet")
+
+    def test_invalid_type_string_field(self):
+        invalid_dict = self.valid_pet_schema.copy()
+        invalid_data = fake_data.pylist(value_types=["boolean", "int", "pyfloat"])
+        invalid_dict['category']['name'] = fake_data.random_element(invalid_data)
+        invalid_dict['name'] = fake_data.random_element(invalid_data)
+        invalid_dict['photoUrls'][0] = fake_data.random_element(invalid_data)
+        invalid_dict['tags'][0]['name'] = fake_data.random_element(invalid_data)
+        with raises(AssertionError):
+            assert_response_schema(invalid_dict, endpoint="pet")
+
+    def test_invalid_type_list_field(self):
+        invalid_dict = self.valid_pet_schema.copy()
+        invalid_data = fake_data.pylist(value_types=["boolean", "int", "pyfloat", "str", "password"])
+        invalid_dict['photoUrls'] = fake_data.random_element(invalid_data)
+        invalid_dict['tags'] = fake_data.random_element(invalid_data)
+        with raises(AssertionError):
+            assert_response_schema(invalid_dict, endpoint="pet")
+
+    def test_invalid_type_dict_field(self):
+        invalid_dict = self.valid_pet_schema.copy()
+        invalid_data = fake_data.pylist(value_types=["boolean", "int", "pyfloat", "str", "password"])
+        invalid_dict['category'] = fake_data.random_element(invalid_data)
+        invalid_dict['tags'][0] = fake_data.random_element(invalid_data)
+        with raises(AssertionError):
+            assert_response_schema(invalid_dict, endpoint="pet")
+
+    def test_invalid_value_enum_field(self):
+        invalid_dict = self.valid_pet_schema.copy()
+        invalid_data = fake_data.pylist(value_types=["boolean", "int", "pyfloat", "str", "password"])
+        invalid_dict['status'] = fake_data.random_element(invalid_data)
+        with raises(AssertionError):
+            assert_response_schema(invalid_dict, endpoint="pet")
