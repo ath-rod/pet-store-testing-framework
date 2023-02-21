@@ -1,6 +1,6 @@
 from assertpy import soft_assertions, assert_that
 from cerberus import Validator
-from utils.get_schema import get_pet_schema
+from utils.get_schema import get_store_order_schema, get_store_inventory_schema, get_pet_schema
 
 
 def assert_dicts_are_equal(expected_dict, actual_dict, parent_path=""):
@@ -22,10 +22,17 @@ def assert_dicts_are_equal(expected_dict, actual_dict, parent_path=""):
 
 
 def assert_response_schema(response, endpoint):
-    schema_validator = Validator(require_all=True)
+    schema_validator = Validator(require_all=True, allow_unknown=False)
     match endpoint:
         case "pet":
             if schema_validator.validate(response, get_pet_schema) is False:
                 raise AssertionError(schema_validator.errors)
+        case "store/order":
+            if schema_validator.validate(response, get_store_order_schema) is False:
+                raise AssertionError(schema_validator.errors)
+        case "store/inventory":
+            schema_validator.allow_unknown = True
+            if schema_validator.validate(response, get_store_inventory_schema) is False:
+                raise AssertionError(schema_validator.errors)
         case _:
-            raise Exception("Endpoint still not available for schema testing.")
+            raise NotImplementedError(f"Endpoint {endpoint} still not available for schema testing.")

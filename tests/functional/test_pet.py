@@ -103,5 +103,5 @@ def test_modify_pet_with_invalid_status(invalid_status):
 
     with soft_assertions():
         assert_that(response.status_code, "Response code").is_equal_to(codes.bad_request)
-        # assert_response_schema(actual_pet.body_as_dict, endpoint="pet")  # TODO: fix only throws this error
+        # assert_response_schema(actual_pet.body_as_dict, endpoint="pet") TODO: fix only throws this error
         assert_that(actual_status).is_equal_to(expected_status)

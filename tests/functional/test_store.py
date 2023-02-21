@@ -2,7 +2,7 @@ import pytest
 from assertpy import assert_that, soft_assertions
 from requests import codes
 
-from core.custom_assertions import assert_dicts_are_equal
+from core.custom_assertions import assert_dicts_are_equal, assert_response_schema
 from helpers.store_wrapper import StoreWrapper
 from helpers.pet_wrapper import PetWrapper
 from resources import random_data_generator
@@ -24,6 +24,7 @@ def test_add_order(existing_pet_id):
     }
     request = store_wrapper.post_order(existing_pet_id, payload=payload)
     assert_that(request.response.status_code, request.response.body_as_raw).is_equal_to(codes.ok)
+    assert_response_schema(request.response.body_as_dict, endpoint="store/order")
     assert_dicts_are_equal(request.payload, request.response.body_as_dict)
 
     response_get = store_wrapper.get_order_by_id(request.response.body_as_dict['id'])
@@ -34,6 +35,7 @@ def test_get_order(existing_pet_id):
     existing_order = store_wrapper.post_order(existing_pet_id)
     response = store_wrapper.get_order_by_id(existing_order.response.body_as_dict['id'])
     assert_that(response.status_code, response.body_as_raw).is_equal_to(codes.ok)
+    assert_response_schema(response.body_as_dict, endpoint="store/order")
     assert_dicts_are_equal(existing_order.response.body_as_dict, response.body_as_dict)
 
 
@@ -55,6 +57,7 @@ def test_modify_order(existing_pet_id):
     response = store_wrapper.put_order(new_order_data)
 
     assert_that(response.status_code, f"{response.body_as_raw} {response.headers}").is_equal_to(codes.ok)
+    assert_response_schema(response.body_as_dict, endpoint="store/order")
     assert_that(response.body_as_dict['id']).is_equal_to(existing_order.response.body_as_dict['id'])
     assert_dicts_are_equal(response.body_as_dict, new_order_data)
 
@@ -62,6 +65,7 @@ def test_modify_order(existing_pet_id):
 def test_get_inventory():
     response = store_wrapper.get_store_inventory()
     assert_that(response.status_code, response.body_as_raw).is_equal_to(codes.ok)
+    assert_response_schema(response.body_as_dict, endpoint="store/inventory")
     assert_that(response.body_as_dict).contains("pending", "available", "sold")
 
 
