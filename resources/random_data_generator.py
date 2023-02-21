@@ -40,7 +40,7 @@ def get_random_list_of_strings(quantity=get_random_number(max_num=30)):
 def get_invalid_status_data():
     yield fake_data.random_int()
     yield fake_data.random_int() * -1
-    yield fake_data.random_number(digits=fake_data.random_int(min=10))
+    yield fake_data.random_number(digits=fake_data.random_int(min=10, max=20))
     yield fake_data.pyfloat()
     yield fake_data.pystr()
     yield fake_data.password(special_chars=True)
