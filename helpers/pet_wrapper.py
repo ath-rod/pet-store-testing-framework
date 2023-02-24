@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from json import dumps
 from pprint import pprint
-from typing import Optional
 
 from base_wrapper import BaseWrapper
 from core.api_core import APIRequest
@@ -13,7 +12,6 @@ class Request:
     headers: dict
     payload: dict
     response: object
-    pet_id: Optional[int] = None
 
 
 class PetWrapper(BaseWrapper):
@@ -24,16 +22,10 @@ class PetWrapper(BaseWrapper):
     def post_pet(self, payload=None) -> object:
         if payload is None:
             payload = generate_pet()
-        if payload != {}:
-            pet_id = payload['id']
         response = self.request.post(self.base_url, dumps(payload), self.headers)
         print("\n!!!POST PET:")
         pprint(response)
-
-        if payload == {}:
-            return Request(self.headers, payload, response)
-        else:
-            return Request(self.headers, payload, response, pet_id)
+        return Request(self.headers, payload, response)
 
     def get_pet_by_id(self, pet_id) -> object:
         url = f'{self.base_url}/{pet_id}'
