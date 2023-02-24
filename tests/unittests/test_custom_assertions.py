@@ -3,8 +3,11 @@ from random import shuffle
 from faker import Faker
 from pytest import raises
 
-from core.custom_assertions import assert_dicts_are_equal
+import random_data_generator
 from resources.random_data_generator import fake_data
+from utils.get_data_set import generate_pet
+from core.custom_assertions import assert_dicts_are_equal, assert_response_schema
+from utils.get_schema import get_pet_schema
 
 fake_data = Faker()
 
@@ -67,3 +70,69 @@ def get_dict_with_dicts_inside_some_lists():
     for key in dict_random_lists:
         dict_with_dicts_inside_lists[key].append(fake_data.pydict())
     return dict_with_dicts_inside_lists
+
+
+class TestAssertSchema:
+    valid_pet_schema = generate_pet()
+    valid_pet_schema.update({"id": random_data_generator.get_random_number()})
+
+    def test_valid_schema(self):
+        assert_response_schema(self.valid_pet_schema, get_pet_schema)
+
+    def test_random_invalid_dict(self):
+        with raises(AssertionError):
+            assert_response_schema(fake_data.pydict(value_types=dict), get_pet_schema)
+
+    def test_incomplete_schema(self):
+        incomplete_dict = self.valid_pet_schema.copy()
+        random_keys = fake_data.random_elements(incomplete_dict.keys(), unique=True)
+        for key in random_keys:
+            incomplete_dict.pop(key)
+        with raises(AssertionError):
+            assert_response_schema(incomplete_dict, get_pet_schema)
+
+    def test_empty_schema(self):
+        with raises(AssertionError):
+            assert_response_schema({}, get_pet_schema)
+
+    def test_invalid_type_integer_field(self):
+        invalid_dict = self.valid_pet_schema.copy()
+        invalid_data = fake_data.pylist(value_types=["boolean", "pyfloat", "str", "password"])
+        invalid_dict['id'] = fake_data.random_element(invalid_data)
+        invalid_dict['category']['id'] = fake_data.random_element(invalid_data)
+        invalid_dict['tags'][0]['id'] = fake_data.random_element(invalid_data)
+        with raises(AssertionError):
+            assert_response_schema(invalid_dict, get_pet_schema)
+
+    def test_invalid_type_string_field(self):
+        invalid_dict = self.valid_pet_schema.copy()
+        invalid_data = fake_data.pylist(value_types=["boolean", "int", "pyfloat"])
+        invalid_dict['category']['name'] = fake_data.random_element(invalid_data)
+        invalid_dict['name'] = fake_data.random_element(invalid_data)
+        invalid_dict['photoUrls'][0] = fake_data.random_element(invalid_data)
+        invalid_dict['tags'][0]['name'] = fake_data.random_element(invalid_data)
+        with raises(AssertionError):
+            assert_response_schema(invalid_dict, get_pet_schema)
+
+    def test_invalid_type_list_field(self):
+        invalid_dict = self.valid_pet_schema.copy()
+        invalid_data = fake_data.pylist(value_types=["boolean", "int", "pyfloat", "str", "password"])
+        invalid_dict['photoUrls'] = fake_data.random_element(invalid_data)
+        invalid_dict['tags'] = fake_data.random_element(invalid_data)
+        with raises(AssertionError):
+            assert_response_schema(invalid_dict, get_pet_schema)
+
+    def test_invalid_type_dict_field(self):
+        invalid_dict = self.valid_pet_schema.copy()
+        invalid_data = fake_data.pylist(value_types=["boolean", "int", "pyfloat", "str", "password"])
+        invalid_dict['category'] = fake_data.random_element(invalid_data)
+        invalid_dict['tags'][0] = fake_data.random_element(invalid_data)
+        with raises(AssertionError):
+            assert_response_schema(invalid_dict, get_pet_schema)
+
+    def test_invalid_value_enum_field(self):
+        invalid_dict = self.valid_pet_schema.copy()
+        invalid_data = fake_data.pylist(value_types=["boolean", "int", "pyfloat", "str", "password"])
+        invalid_dict['status'] = fake_data.random_element(invalid_data)
+        with raises(AssertionError):
+            assert_response_schema(invalid_dict, get_pet_schema)
