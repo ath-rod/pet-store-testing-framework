@@ -15,12 +15,20 @@ def get_random_number(min_num=0, max_num=9999):
     return random.randint(min_num, max_num)
 
 
-def get_random_element(options):
+def get_random_choice(options):
     return random.choice(options)
 
 
 def get_random_name():
     return random.choice([fake_data.first_name(), fake_data.name()])
+
+
+def get_random_string():
+    return fake_data.pystr()
+
+
+def get_random_email():
+    return fake_data.free_email()
 
 
 def get_random_list_of_names(quantity=get_random_number(max_num=30)):

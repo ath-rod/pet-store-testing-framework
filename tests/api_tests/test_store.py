@@ -20,7 +20,7 @@ def test_add_order(existing_pet_id):
         "petId": existing_pet_id,
         "quantity": random_data_generator.get_random_number(),
         "shipDate": parsed_date(),
-        "status": random_data_generator.get_random_element(["placed", "approved", "delivered"]),
+        "status": random_data_generator.get_random_choice(["placed", "approved", "delivered"]),
         "complete": random_data_generator.get_random_bool()
     }
     request = store_wrapper.post_order(existing_pet_id, payload=payload)

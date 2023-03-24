@@ -16,7 +16,7 @@ def generate_pet():
                 "name": random_data_generator.get_random_name()
             }
         ],
-        "status": random_data_generator.get_random_element(["available", "pending", "sold"])
+        "status": random_data_generator.get_random_choice(["available", "pending", "sold"])
     }
     return payload
 
@@ -26,7 +26,7 @@ def generate_order(pet_id):
         "petId": pet_id,
         "quantity": random_data_generator.get_random_number(),
         "shipDate": parsed_date(),
-        "status": random_data_generator.get_random_element(["placed", "approved", "delivered"]),
+        "status": random_data_generator.get_random_choice(["placed", "approved", "delivered"]),
         "complete": random_data_generator.get_random_bool()
     }
     return payload

@@ -25,7 +25,7 @@ def test_add_pet():
                 "name": random_data_generator.get_random_name()
             }
         ],
-        "status": random_data_generator.get_random_element(["available", "pending", "sold"])
+        "status": random_data_generator.get_random_choice(["available", "pending", "sold"])
     }
     request = wrapper.post_pet(payload=payload)
     assert_that(request.response.status_code, request.response.body_as_raw).is_equal_to(codes.ok)

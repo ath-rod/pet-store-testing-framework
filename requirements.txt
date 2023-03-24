@@ -3,3 +3,5 @@ assertpy
 requests
 Faker
 Cerberus
+selenium
+webdriver_manager
