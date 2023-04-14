@@ -9,7 +9,7 @@ class LocatorType(Enum):
     XPATH = auto()
 
 
-def find_element(driver, locator_type, locator):
+def find_element(driver, locator_type, locator):  # TODO: move this to enum itself
     match locator_type:
         case LocatorType.ID:
             element = driver.find_element(by=By.ID, value=locator)

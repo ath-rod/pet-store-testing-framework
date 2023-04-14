@@ -9,5 +9,8 @@ class HomePage:
     def go_to_page(self):
         self.driver.get("https://petstore.octoperf.com/actions/Catalog.action")
 
-    def sidebar_cat_option(self):
-        return Element(self.driver, LocatorType.XPATH, "//div[@id='Sidebar']//a[href$='CATS']")  # TODO: fix xpath
+    def sidebar_pet_option(self, pet):
+        return Element(self.driver, LocatorType.XPATH, f"//div[@id='Sidebar']//a[contains(@href,'{pet}')]")
+
+    def welcome_user_message(self):
+        return Element(self.driver, LocatorType.ID, "WelcomeContent")
