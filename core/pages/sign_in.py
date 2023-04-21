@@ -1,3 +1,4 @@
+from config import UI_BASE_URI
 from core.element import Element
 from utils.ui_utils import LocatorType
 
@@ -7,7 +8,7 @@ class SignInPage:
         self.driver = driver
 
     def go_to_page(self):
-        self.driver.get("https://petstore.octoperf.com/actions/Account.action?signonForm=")
+        self.driver.get(f"{UI_BASE_URI}/Account.action?signonForm=")
 
     def username_input(self):
         return Element(self.driver, LocatorType.NAME, "username")
@@ -19,4 +20,4 @@ class SignInPage:
         return Element(self.driver, LocatorType.NAME, "signon")
 
     def error_message(self):
-        return Element(self.driver, LocatorType.XPATH, "//ul[contains(@class, 'messages')]/li")  # TODO: /text() too or you get that in the action as get text?
+        return Element(self.driver, LocatorType.XPATH, "//ul[contains(@class, 'messages')]/li")

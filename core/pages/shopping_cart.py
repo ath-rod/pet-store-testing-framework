@@ -1,3 +1,4 @@
+from config import UI_BASE_URI
 from core.element import Element
 from utils.ui_utils import LocatorType
 
@@ -7,10 +8,13 @@ class ShoppingCartPage:
         self.driver = driver
 
     def go_to_page(self):
-        self.driver.get("https://petstore.octoperf.com/actions/Cart.action?viewCart=")
+        self.driver.get(f"{UI_BASE_URI}/Cart.action?viewCart=")
 
-    def quantity_input(self):
-        return Element(self.driver, LocatorType.XPATH, "//tbody/tr[2]/td[5]/input")  # TODO: very ugly
+    def quantity_input(self, description):
+        return Element(self.driver, LocatorType.XPATH, f"//td[normalize-space(text()) = '{description}']/..//input")
+
+    def pet_description_info(self, description):
+        return Element(self.driver, LocatorType.XPATH, f"//td[normalize-space(text()) = '{description}']")
 
     def checkout_button(self):
-        return Element(self.driver, LocatorType.XPATH, "//a[contains(@href, 'newOrder')]")
+        return Element(self.driver, LocatorType.XPATH, "//a[normalize-space(text()) = 'Proceed to Checkout']")

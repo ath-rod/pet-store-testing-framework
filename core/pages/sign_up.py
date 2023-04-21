@@ -1,3 +1,4 @@
+from config import UI_BASE_URI
 from core.element import Element
 from utils.ui_utils import LocatorType
 
@@ -7,7 +8,7 @@ class SignUpPage:
         self.driver = driver
 
     def go_to_page(self):
-        self.driver.get("https://petstore.octoperf.com/actions/Account.action?newAccountForm=")
+        self.driver.get(f"{UI_BASE_URI}/Account.action?newAccountForm=")
 
     def user_id_input(self):
         return Element(self.driver, LocatorType.NAME, "username")

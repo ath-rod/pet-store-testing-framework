@@ -65,6 +65,7 @@ class TestUser(UIBaseClassTest):
         self.sign_up_page.repeat_password_input().clear_and_send_keys(get_random_string())
         self.sign_up_page.save_account_button().click()
 
+        #  TODO: update test assertions after bug is fixed
         assert_that_element_is_present(self.driver, LocatorType.NAME, "newAccount", "Sign Up Page")
 
     def test_sign_in_valid_user(self):

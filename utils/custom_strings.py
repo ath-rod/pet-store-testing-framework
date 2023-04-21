@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from re import sub
 
 
 def error_name(error) -> str:
@@ -27,3 +28,8 @@ def parsed_date(date=None):
     date = str(date)[::-1].replace(":", "", 1)[::-1]
     date = date[:date.rfind("+") - 3] + date[date.rfind("+"):]
     return date
+
+
+def price_number(price_to_convert):
+    number = sub("[^0-9.]", "", price_to_convert)
+    return float(number)
