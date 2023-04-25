@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from json import dumps
-from pprint import pprint
+from pprint import pformat
 
 from base_wrapper import BaseWrapper
+from config import logger
 from core.api_core import APIRequest
 from utils.get_data_set import generate_order
 
@@ -25,8 +26,7 @@ class StoreWrapper(BaseWrapper):
             payload = generate_order(pet_id)
 
         response = self.request.post(url, dumps(payload), self.headers)
-        print("\n!!!POST ORDER:")
-        pprint(response)
+        logger.info(f"POST ORDER: {pformat(response)}")
 
         return Request(
             self.headers, payload, response
@@ -35,27 +35,23 @@ class StoreWrapper(BaseWrapper):
     def get_order_by_id(self, order_id) -> object:
         url = f'{self.base_url}/order/{order_id}'
         response = self.request.get(url)
-        print("\n!!!GET ORDER:")
-        pprint(response)
+        logger.info(f"GET ORDER: {pformat(response)}")
         return response
 
     def delete_order_by_id(self, order_id) -> object:
         url = f'{self.base_url}/order/{order_id}'
         response = self.request.delete(url)
-        print("\n!!!DELETE ORDER:")
-        pprint(response)
+        logger.info(f"DELETE ORDER: {pformat(response)}")
         return response
 
     def put_order(self, payload: dict) -> object:
         url = f'{self.base_url}/order'
         response = self.request.put(url, dumps(payload), self.headers)
-        print("\n!!!PUT ORDER:")
-        pprint(response)
+        logger.info(f"PUT ORDER: {pformat(response)}")
         return response
 
     def get_store_inventory(self) -> object:
         url = f'{self.base_url}/inventory'
         response = self.request.get(url)
-        print("\n!!!GET INVENTORY:")
-        pprint(response)
+        logger.info(f"GET INVENTORY: {pformat(response)}")
         return response

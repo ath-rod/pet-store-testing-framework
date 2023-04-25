@@ -3,6 +3,7 @@ from assertpy import soft_assertions, assert_that
 
 from base_class_test import UIBaseClassTest
 from config import UI_BASE_URI
+from config import logger
 from core.custom_assertions import assert_that_element_is_present
 from helpers.ui_helpers import RandomUser
 from random_data_generator import get_random_number
@@ -21,7 +22,7 @@ class TestBuyPet(UIBaseClassTest):
     @pytest.fixture()
     def sign_out_setup_sign_in_teardown(self):
         self.driver.get(f"{UI_BASE_URI}/Account.action?signoff=")
-        print("Signed off")
+        logger.info("Signed off")
         yield
         self.random_user.log_in_random_user()
 
