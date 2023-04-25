@@ -14,7 +14,6 @@ wrapper = PetWrapper()
 def test_add_pet():
     payload = {
         "category": {
-            "id": random_data_generator.get_random_number(),
             "name": random_data_generator.get_random_name()
         },
         "name": random_data_generator.get_random_name(),

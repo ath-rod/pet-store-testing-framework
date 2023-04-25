@@ -3,9 +3,6 @@ from assertpy import assert_that
 
 from base_class_test import UIBaseClassTest
 from core.custom_assertions import assert_that_element_is_present
-from core.pages.home import HomePage
-from core.pages.sign_in import SignInPage
-from core.pages.sign_up import SignUpPage
 from helpers.ui_helpers import RandomUser
 from random_data_generator import get_random_number, get_random_string, get_random_name, get_random_email, \
     get_random_choice
@@ -14,13 +11,6 @@ from utils.ui_utils import LocatorType
 
 
 class TestUser(UIBaseClassTest):
-    @classmethod
-    def setup_class(cls):
-        super().setup_class()
-        cls.sign_up_page = SignUpPage(cls.driver)
-        cls.sign_in_page = SignInPage(cls.driver)
-        cls.home_page = HomePage(cls.driver)
-
     def test_add_new_user(self):  # TODO: add improvement in report to include success message
         user_id = get_random_string()
         password = get_random_string()

@@ -30,6 +30,6 @@ def parsed_date(date=None):
     return date
 
 
-def price_number(price_to_convert):
-    number = sub("[^0-9.]", "", price_to_convert)
+def get_number_from_price_string(price_to_convert):
+    number = sub("[^\d\.]", "", price_to_convert)
     return float(number)

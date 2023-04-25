@@ -18,3 +18,6 @@ class ShoppingCartPage:
 
     def checkout_button(self):
         return Element(self.driver, LocatorType.XPATH, "//a[normalize-space(text()) = 'Proceed to Checkout']")
+
+    def not_logged_in_error_message(self):
+        return Element(self.driver, LocatorType.XPATH, "//ul['messages']/li")
