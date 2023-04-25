@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from json import dumps
 from pprint import pformat
 
-from base_wrapper import BaseWrapper
+from helpers.base_wrapper import BaseWrapper
 from config import logger
 from core.api_core import APIRequest
 from utils.get_data_set import generate_pet
