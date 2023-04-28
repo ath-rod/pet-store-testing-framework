@@ -25,7 +25,7 @@ logging.config.dictConfig({
             'stream': 'ext://sys.stdout'
         },
         'file': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'file_format',
             'filename': f"{logger_dir}\\pet_store.log",
