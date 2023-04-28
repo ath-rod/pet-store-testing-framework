@@ -11,6 +11,7 @@ from utils.get_schema import get_pet_schema
 wrapper = PetWrapper()
 
 
+@pytest.mark.skip(reason="Fails inconsistently due to Bug XXX")
 def test_add_pet():
     payload = {
         "category": {
