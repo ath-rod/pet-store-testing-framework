@@ -2,27 +2,21 @@ import pytest
 from assertpy import soft_assertions, assert_that
 
 from base_class_test import UIBaseClassTest
-from config import UI_BASE_URI
-from config import logger
-from core.custom_assertions import assert_that_element_is_present
-from helpers.ui_helpers import RandomUser
+from core.custom_assertions import assert_that_element_is_present, assert_that_element_is_not_present
 from random_data_generator import get_random_number
 from utils.custom_strings import get_number_from_price_string
 from utils.get_data_set import get_random_pet_breed_and_description
-from utils.ui_utils import LocatorType
 
 
 class TestBuyPet(UIBaseClassTest):
     @classmethod
     def setup_class(cls):
         super().setup_class()
-        cls.random_user = RandomUser(cls.driver)
         cls.random_user.log_in_random_user()
 
     @pytest.fixture()
     def sign_out_setup_sign_in_teardown(self):
-        self.driver.get(f"{UI_BASE_URI}/Account.action?signoff=")
-        logger.info("Signed off")
+        self.go_to_sign_off_page()
         yield
         self.random_user.log_in_random_user()
 
@@ -99,8 +93,8 @@ class TestBuyPet(UIBaseClassTest):
         self.order_confirmation_page.go_to_page()
         #  TODO: add assertion for error message after bug is fixed
         self.shopping_cart_page.go_to_page()
-        assert_that_element_is_present(self.driver, LocatorType.NAME,
-                                       f"//td[normalize-space(text()) = '{description}']", "Shopping Cart")
+        assert_that_element_is_present(self.shopping_cart_page.pet_description_info(description),
+                                       self.shopping_cart_page)
 
     @pytest.mark.parametrize("invalid_quantity", [0, get_random_number(min_num=-9999, max_num=-1)])
     @pytest.mark.parametrize("pet, breed, description, price", [get_random_pet_breed_and_description()])
@@ -111,11 +105,8 @@ class TestBuyPet(UIBaseClassTest):
         self.breed_catalog_page.pet_breed(breed).click()
         self.description_catalog_page.pet_add_to_cart_button(description).click()
         self.shopping_cart_page.quantity_input(description).clear_and_send_keys(invalid_quantity).press_enter()
-        assert_that_element_is_present(self.driver, LocatorType.XPATH, "//b[contains(text(), 'Your cart is empty.')]",
-                                       "Shopping Cart")
-        with pytest.raises(AssertionError):
-            assert_that_element_is_present(self.driver, LocatorType.XPATH,
-                                           "//a[normalize-space(text()) = 'Proceed to Checkout']", "Shopping Cart")
+        assert_that_element_is_present(self.shopping_cart_page.empty_cart_message(), self.shopping_cart_page)
+        assert_that_element_is_not_present(self.shopping_cart_page.checkout_button(), self.shopping_cart_page)
 
     @pytest.mark.parametrize("pet, breed, description, price", [get_random_pet_breed_and_description()])
     def test_checkout_without_being_logged_in(self, pet, breed, description, price, sign_out_setup_sign_in_teardown):
@@ -124,8 +115,7 @@ class TestBuyPet(UIBaseClassTest):
         self.breed_catalog_page.pet_breed(breed).click()
         self.description_catalog_page.pet_add_to_cart_button(description).click()
         self.shopping_cart_page.checkout_button().click()
-        assert_that_element_is_present(self.driver, LocatorType.XPATH, "//ul['messages']/li",
-                                       "Log In")
+        assert_that_element_is_present(self.shopping_cart_page.not_logged_in_error_message(), self.shopping_cart_page)
         error_message = self.shopping_cart_page.not_logged_in_error_message().get_text()
         assert_that(error_message).is_equal_to(
             "You must sign on before attempting to check out. Please sign on and try checking out again.")

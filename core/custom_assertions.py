@@ -1,8 +1,5 @@
 from assertpy import soft_assertions, assert_that
 from cerberus import Validator
-from selenium.common import NoSuchElementException
-
-from utils.ui_utils import LocatorType
 
 
 def assert_dicts_are_equal(expected_dict, actual_dict, parent_path=""):
@@ -39,8 +36,13 @@ def assert_response_schema(response, expected_schema, allow_unknown=False):
         raise AssertionError(schema_validator.errors)
 
 
-def assert_that_element_is_present(driver, locator_type, locator, page):
-    try:
-        driver.find_element(by=LocatorType.to_selenium_type(locator_type), value=locator)
-    except NoSuchElementException:
-        raise AssertionError(f"Element '{locator}' not present in {page}.")
+def assert_that_element_is_present(element, page):
+    element_data = element.is_element_present()
+    error_message = f"Element '{element_data['Locator']}' not present in {type(page).__name__}"
+    assert_that(element_data['Present']).described_as(error_message).is_true()
+
+
+def assert_that_element_is_not_present(element, page):
+    element_data = element.is_element_present()
+    error_message = f"Element '{element_data['Locator']}' present in {type(page).__name__}"
+    assert_that(element_data['Present']).described_as(error_message).is_false()

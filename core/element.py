@@ -1,3 +1,4 @@
+from selenium.common import NoSuchElementException
 from selenium.webdriver import Keys
 from selenium.webdriver.support.ui import Select
 
@@ -8,40 +9,58 @@ from utils.ui_utils import LocatorType
 class Element:
     def __init__(self, driver, locator_type, locator):
         self.locator = locator
-        self.web_element = driver.find_element(by=LocatorType.to_selenium_type(locator_type), value=self.locator)
+        self.locator_type = locator_type
+        self.driver = driver
+        self.web_element = None
 
     def click(self):
+        self.web_element = self.driver.find_element(LocatorType.to_selenium_type(self.locator_type), self.locator)
         self.web_element.click()
-        logger.info(f"Clicked {self.locator}")
+        logger.info(f"Clicked [{self.locator}]")
         return self  # so you can page.web_element.click().other_action()
 
     def clear(self):
+        self.web_element = self.driver.find_element(LocatorType.to_selenium_type(self.locator_type), self.locator)
         self.web_element.clear()
-        logger.info(f"Cleared {self.locator}")
+        logger.info(f"Cleared [{self.locator}]")
         return self
 
     def clear_and_send_keys(self, text):
+        self.web_element = self.driver.find_element(LocatorType.to_selenium_type(self.locator_type), self.locator)
         self.web_element.clear()
         self.web_element.send_keys(text)
-        logger.info(f"Cleared and sent '{text}' keys into {self.locator}")
+        logger.info(f"Cleared and sent '{text}' keys into [{self.locator}]")
         return self
 
     def select_option(self, option):
+        self.web_element = self.driver.find_element(LocatorType.to_selenium_type(self.locator_type), self.locator)
         Select(self.web_element).select_by_value(option)
-        logger.info(f"Selected {option} from {self.locator}")
+        logger.info(f"Selected {option} from [{self.locator}]")
         return self
 
     def get_text(self):
+        self.web_element = self.driver.find_element(LocatorType.to_selenium_type(self.locator_type), self.locator)
         text = self.web_element.text
-        logger.info(f"Obtained '{text}' text from {self.locator}")
+        logger.info(f"Obtained '{text}' text from [{self.locator}]")
         return text
 
     def get_text_from_input(self):
+        self.web_element = self.driver.find_element(LocatorType.to_selenium_type(self.locator_type), self.locator)
         text = self.web_element.get_attribute("value")
-        logger.info(f"Obtained '{text}' text from {self.locator} input")
+        logger.info(f"Obtained '{text}' text from [{self.locator}] input")
         return text
 
     def press_enter(self):
+        self.web_element = self.driver.find_element(LocatorType.to_selenium_type(self.locator_type), self.locator)
         self.web_element.send_keys(Keys.ENTER)
-        logger.info(f"Pressed ENTER on {self.locator}")
+        logger.info(f"Pressed ENTER on [{self.locator}]")
         return self
+
+    def is_element_present(self):
+        try:
+            self.driver.find_element(LocatorType.to_selenium_type(self.locator_type), self.locator)
+            logger.info(f"Element [{self.locator}] present")
+            return {"Present": True, "Locator": self.locator}
+        except NoSuchElementException:
+            logger.info(f"Element [{self.locator}] not present")
+            return {"Present": False, "Locator": self.locator}

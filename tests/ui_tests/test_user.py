@@ -36,14 +36,14 @@ class TestUser(UIBaseClassTest):
         self.sign_up_page.my_banner_checkbox().click()
         self.sign_up_page.save_account_button().click()
 
-        assert_that_element_is_present(self.driver, LocatorType.ID, "Welcome", "Home Page")
+        assert_that_element_is_present(self.home_page.distinctive_home_page_element(), page=self.home_page)
 
     def test_add_new_user_with_no_data(self):  # TODO: add improvement in report to include error message
         self.sign_up_page.go_to_page()
         clear_user_and_account_info(self.sign_up_page)
         self.sign_up_page.save_account_button().click()
 
-        assert_that_element_is_present(self.driver, LocatorType.NAME, "newAccount", "Sign Up Page")
+        assert_that_element_is_present(self.sign_up_page.save_account_button(), self.sign_up_page)
 
     @pytest.mark.xfail(reason="Fails due to bug XXX")
     def test_add_new_user_with_no_account_information(self):
@@ -56,10 +56,10 @@ class TestUser(UIBaseClassTest):
         self.sign_up_page.save_account_button().click()
 
         #  TODO: update test assertions after bug is fixed
-        assert_that_element_is_present(self.driver, LocatorType.NAME, "newAccount", "Sign Up Page")
+        assert_that_element_is_present(self.sign_up_page.save_account_button(), self.sign_up_page)
 
     def test_sign_in_valid_user(self):
-        user = RandomUser(self.driver)
+        user = self.random_user
         user.register_new_user()
         self.sign_in_page.go_to_page()
 
@@ -67,8 +67,8 @@ class TestUser(UIBaseClassTest):
         self.sign_in_page.password_input().clear_and_send_keys(user.password)
         self.sign_in_page.log_in_button().click()
 
-        assert_that_element_is_present(self.driver, LocatorType.ID, "Welcome", "Home Page")
-        assert_that_element_is_present(self.driver, LocatorType.ID, "WelcomeContent", "Home Page")
+        assert_that_element_is_present(self.home_page.distinctive_home_page_element(), self.home_page)
+        assert_that_element_is_present(self.home_page.welcome_user_message(), self.home_page)
         welcome_message = self.home_page.welcome_user_message().get_text()
         assert_that(welcome_message).is_equal_to(f"Welcome {user.first_name}!")
 
@@ -79,8 +79,7 @@ class TestUser(UIBaseClassTest):
         self.sign_in_page.password_input().clear_and_send_keys(get_random_string())
         self.sign_in_page.log_in_button().click()
 
-        assert_that_element_is_present(self.driver, LocatorType.XPATH, "//ul[contains(@class, 'messages')]/li",
-                                       "Sign In Page")
+        assert_that_element_is_present(self.sign_in_page.error_message(), self.sign_in_page)
         error_message = self.sign_in_page.error_message().get_text()
         assert_that(error_message).is_equal_to("Invalid username or password. Signon failed.")
 

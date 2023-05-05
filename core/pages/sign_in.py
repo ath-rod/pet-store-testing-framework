@@ -20,4 +20,4 @@ class SignInPage:
         return Element(self.driver, LocatorType.NAME, "signon")
 
     def error_message(self):
-        return Element(self.driver, LocatorType.XPATH, "//ul[contains(@class, 'messages')]/li")
+        return Element(self.driver, LocatorType.XPATH, "//ul['messages']/li")

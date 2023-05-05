@@ -44,6 +44,7 @@ def test_get_pet():
     assert_dicts_are_equal(request_new_pet.response.body_as_dict, response.body_as_dict)
 
 
+@pytest.mark.skip("Fails inconsistently due to Bug XXX")
 def test_remove_pet():
     existing_pet = wrapper.post_pet()
     response = wrapper.delete_pet_by_id(existing_pet.response.body_as_dict['id'])

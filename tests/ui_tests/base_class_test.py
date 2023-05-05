@@ -1,31 +1,41 @@
-from driver import ChromeDriver
-from core.pages.catalogs import PetBreedCatalogPage, PetDescriptionCatalogPage
-from core.pages.checkout import CheckoutPage, ConfirmCheckoutInformationPage, OrderConfirmationPage
+from config import UI_BASE_URI, logger
+from core.pages.pet_breed_catalog import PetBreedCatalogPage
+from core.pages.pet_description_catalog import PetDescriptionCatalogPage
+from core.pages.checkout import CheckoutPage
+from core.pages.order_confirmation import OrderConfirmationPage
+from core.pages.confirm_checkout_information import ConfirmCheckoutInformationPage
 from core.pages.home import HomePage
 from core.pages.pet_card import PetCardPage
 from core.pages.shopping_cart import ShoppingCartPage
 from core.pages.sign_in import SignInPage
 from core.pages.sign_up import SignUpPage
+from driver import ChromeDriver
+from helpers.ui_helpers import RandomUser
 
 
 class UIBaseClassTest:
-    driver = None
+    __driver = None
 
     @classmethod
     def setup_class(cls):
-        cls.driver = ChromeDriver()
-        cls.driver = cls.driver.driver
-        cls.home_page = HomePage(cls.driver)
-        cls.sign_up_page = SignUpPage(cls.driver)
-        cls.sign_in_page = SignInPage(cls.driver)
-        cls.breed_catalog_page = PetBreedCatalogPage(cls.driver)
-        cls.description_catalog_page = PetDescriptionCatalogPage(cls.driver)
-        cls.shopping_cart_page = ShoppingCartPage(cls.driver)
-        cls.checkout_page = CheckoutPage(cls.driver)
-        cls.confirm_checkout_page = ConfirmCheckoutInformationPage(cls.driver)
-        cls.order_confirmation_page = OrderConfirmationPage(cls.driver)
-        cls.pet_card_page = PetCardPage(cls.driver)
+        cls.__driver = ChromeDriver()
+        cls.__driver = cls.__driver.driver
+        cls.home_page = HomePage(cls.__driver)
+        cls.sign_up_page = SignUpPage(cls.__driver)
+        cls.sign_in_page = SignInPage(cls.__driver)
+        cls.breed_catalog_page = PetBreedCatalogPage(cls.__driver)
+        cls.description_catalog_page = PetDescriptionCatalogPage(cls.__driver)
+        cls.shopping_cart_page = ShoppingCartPage(cls.__driver)
+        cls.checkout_page = CheckoutPage(cls.__driver)
+        cls.confirm_checkout_page = ConfirmCheckoutInformationPage(cls.__driver)
+        cls.order_confirmation_page = OrderConfirmationPage(cls.__driver)
+        cls.pet_card_page = PetCardPage(cls.__driver)
+        cls.random_user = RandomUser(cls.__driver)
 
     @classmethod
     def teardown_class(cls):
-        cls.driver.quit()
+        cls.__driver.quit()
+
+    def go_to_sign_off_page(self):
+        self.__driver.get(f"{UI_BASE_URI}/Account.action?signoff=")
+        logger.info("Signed off")

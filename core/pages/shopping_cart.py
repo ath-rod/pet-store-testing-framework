@@ -21,3 +21,6 @@ class ShoppingCartPage:
 
     def not_logged_in_error_message(self):
         return Element(self.driver, LocatorType.XPATH, "//ul['messages']/li")
+
+    def empty_cart_message(self):
+        return Element(self.driver, LocatorType.XPATH, "//b[contains(text(), 'Your cart is empty.')]")

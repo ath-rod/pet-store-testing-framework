@@ -41,8 +41,6 @@ class APIRequest:
         try:
             body_as_dict = response.json()
         except JSONDecodeError as error:
-            logger.error(f"{error_name(error)} raised from status code {status_code}, headers: {headers},"
-                          f"and body {body_as_raw}")
             if len(body_as_raw) > 200:
                 body_as_raw = f"{body_as_raw[:150]} ... {body_as_raw[-40:]}"
             raise Exception(f"{error_name(error)} raised from status code {status_code}, headers: {headers},"

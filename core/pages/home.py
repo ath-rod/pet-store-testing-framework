@@ -18,3 +18,6 @@ class HomePage:
 
     def welcome_user_message(self):
         return Element(self.driver, LocatorType.ID, "WelcomeContent")
+
+    def distinctive_home_page_element(self):
+        return Element(self.driver, LocatorType.ID, "Welcome")
