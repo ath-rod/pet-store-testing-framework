@@ -1,6 +1,6 @@
+from config import UI_BASE_URI
 from core.element import Element
 from utils.ui_utils import LocatorType
-from config import UI_BASE_URI
 
 
 class HomePage:

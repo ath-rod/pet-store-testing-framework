@@ -3,7 +3,7 @@ from assertpy import soft_assertions, assert_that
 
 from base_class_test import UIBaseClassTest
 from core.custom_assertions import assert_that_element_is_present, assert_that_element_is_not_present
-from random_data_generator import get_random_number
+from resources.random_data_generator import get_random_number
 from utils.custom_strings import get_number_from_price_string
 from utils.get_data_set import get_random_pet_breed_and_description
 

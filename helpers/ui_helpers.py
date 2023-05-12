@@ -1,6 +1,6 @@
 from core.pages.sign_in import SignInPage
 from core.pages.sign_up import SignUpPage
-from random_data_generator import get_random_number, get_random_string, get_random_name, get_random_email, \
+from resources.random_data_generator import get_random_number, get_random_string, get_random_name, get_random_email, \
     get_random_choice
 from utils.get_data_set import PetSpecies
 

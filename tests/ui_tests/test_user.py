@@ -3,11 +3,9 @@ from assertpy import assert_that
 
 from base_class_test import UIBaseClassTest
 from core.custom_assertions import assert_that_element_is_present
-from helpers.ui_helpers import RandomUser
-from random_data_generator import get_random_number, get_random_string, get_random_name, get_random_email, \
+from resources.random_data_generator import get_random_number, get_random_string, get_random_name, get_random_email, \
     get_random_choice
 from utils.get_data_set import PetSpecies
-from utils.ui_utils import LocatorType
 
 
 class TestUser(UIBaseClassTest):

@@ -1,5 +1,6 @@
 import logging.config
 import os
+import sys
 
 API_BASE_URI = "https://petstore.swagger.io/v2"
 UI_BASE_URI = "https://petstore.octoperf.com/actions"
@@ -42,3 +43,14 @@ logging.config.dictConfig({
 })
 
 logger = logging.getLogger('default')
+
+
+# Catches all UNCAUGHT exceptions to log - see https://stackoverflow.com/a/16993115
+def handle_exception(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+    logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+
+
+sys.excepthook = handle_exception

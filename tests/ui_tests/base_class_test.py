@@ -1,16 +1,16 @@
 from config import UI_BASE_URI, logger
-from core.pages.pet_breed_catalog import PetBreedCatalogPage
-from core.pages.pet_description_catalog import PetDescriptionCatalogPage
 from core.pages.checkout import CheckoutPage
-from core.pages.order_confirmation import OrderConfirmationPage
 from core.pages.confirm_checkout_information import ConfirmCheckoutInformationPage
 from core.pages.home import HomePage
+from core.pages.order_confirmation import OrderConfirmationPage
+from core.pages.pet_breed_catalog import PetBreedCatalogPage
 from core.pages.pet_card import PetCardPage
+from core.pages.pet_description_catalog import PetDescriptionCatalogPage
 from core.pages.shopping_cart import ShoppingCartPage
 from core.pages.sign_in import SignInPage
 from core.pages.sign_up import SignUpPage
-from driver import ChromeDriver
 from helpers.ui_helpers import RandomUser
+from resources.driver import ChromeDriver
 
 
 class UIBaseClassTest:

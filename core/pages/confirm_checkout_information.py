@@ -12,4 +12,3 @@ class ConfirmCheckoutInformationPage:
 
     def confirm_button(self):
         return Element(self.driver, LocatorType.XPATH, "//a[contains(text(), 'Confirm')]")
-    

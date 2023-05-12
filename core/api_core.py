@@ -1,4 +1,3 @@
-from config import logger
 from dataclasses import dataclass
 from json import JSONDecodeError
 

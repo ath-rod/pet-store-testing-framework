@@ -3,10 +3,9 @@ from random import shuffle
 from faker import Faker
 from pytest import raises
 
-import random_data_generator
-from resources.random_data_generator import fake_data
-from utils.get_data_set import generate_pet
 from core.custom_assertions import assert_dicts_are_equal, assert_response_schema
+from resources import random_data_generator
+from utils.get_data_set import generate_pet
 from utils.get_schema import get_pet_schema
 
 fake_data = Faker()
