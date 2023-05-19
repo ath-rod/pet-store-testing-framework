@@ -20,7 +20,7 @@ class StoreWrapper(BaseWrapper):
         super().__init__(url_path='store')
         self.request = APIRequest()
 
-    def post_order(self, pet_id, payload=None) -> object:
+    def post_order(self, pet_id=None, payload=None) -> object:
         url = f'{self.base_url}/order'
         if payload is None:
             payload = generate_order(pet_id)

@@ -52,7 +52,7 @@ def test_remove_order(existing_pet_id):
     assert_that(response_get_deleted_order.status_code).is_equal_to(codes.not_found)
 
 
-@pytest.mark.xfail(reason="Fails due to bug #00X")
+@pytest.mark.xfail(reason="Fails due to bug #001")
 def test_modify_order(existing_pet_id):
     existing_order = store_wrapper.post_order(existing_pet_id)
     new_order_data = {"id": existing_order.response.body_as_dict['id']}
@@ -82,13 +82,15 @@ def test_add_order_for_0_pets(existing_pet_id):
     assert_that(request.response.status_code, request.response.body_as_raw).is_equal_to(codes.bad_request)
 
 
-@pytest.mark.xfail(reason="Fails due to bug #00X")
-def test_add_order_for_sold_pet():
+@pytest.mark.xfail(reason="Fails due to bug #003")
+def test_add_approved_order_for_sold_pet():
     sold_pet_data = generate_pet()
     sold_pet_data['status'] = "sold"
     sold_pet = pet_wrapper.post_pet(sold_pet_data)
 
-    request = store_wrapper.post_order(sold_pet.response.body_as_dict['id'])
+    invalid_order = generate_order(sold_pet.response.body_as_dict['id'])
+    invalid_order['status'] = "approved"
+    request = store_wrapper.post_order(payload=invalid_order)
     assert_that(request.response.status_code, request.response.body_as_raw).is_equal_to(codes.bad_request)
 
 
@@ -115,7 +117,7 @@ def test_add_already_existing_order(existing_pet_id):
         assert_dicts_are_equal(existing_order.response.body_as_dict, actual_order.body_as_dict)
 
 
-@pytest.mark.xfail(reason="Fails due to bug #00X")
+@pytest.mark.xfail(reason="Fails due to bug #001")
 @pytest.mark.parametrize("invalid_status", random_data_generator.get_invalid_status_data(), ids=repr)
 def test_modify_order_with_invalid_status(invalid_status, existing_pet_id):
     existing_order = store_wrapper.post_order(existing_pet_id)
@@ -148,7 +150,7 @@ def test_order_id_is_generated(existing_pet_id):
         assert_that(request.response.body_as_dict['id'], "ID").is_not_equal_to(new_order['id'])
 
 
-@pytest.mark.xfail(reason="Fails due to bug #00X")
+@pytest.mark.xfail(reason="Fails due to bug #001")
 def test_e2e_order_process():
     available_pet_data = generate_pet()
     available_pet_data['status'] = "available"
