@@ -50,6 +50,12 @@ class Element:
         logger.info(f"Obtained '{text}' text from [{self.locator}] input")
         return text
 
+    def get_element_type(self):
+        self.web_element = self.__get_selenium_element()
+        element_type = self.web_element.get_attribute("type")
+        logger.info(f"Obtained '{element_type}' type from [{self.locator}]")
+        return element_type
+
     def press_enter(self):
         self.web_element = self.__get_selenium_element()
         self.web_element.send_keys(Keys.ENTER)

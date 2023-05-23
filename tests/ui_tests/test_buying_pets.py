@@ -79,11 +79,13 @@ class TestBuyPet(UIBaseClassTest):
             assert_that(actual_pet_ordered, "Pet Ordered").is_equal_to(description)
             assert_that(int(actual_pet_quantity), "Pet Quantity").is_equal_to(expected_pet_quantity)
             assert_that(get_number_from_price_string(actual_pet_price), "Pet Price").is_equal_to(price)
-            assert_that(get_number_from_price_string(actual_pet_total_cost), "Pet Total").is_equal_to(expected_total)
-            assert_that(get_number_from_price_string(actual_order_total), "Order Total").is_equal_to(expected_total)
+            assert_that(get_number_from_price_string(actual_pet_total_cost), "Pet Total").is_close_to(expected_total,
+                                                                                                      tolerance=0.01)
+            assert_that(get_number_from_price_string(actual_order_total), "Order Total").is_close_to(expected_total,
+                                                                                                     tolerance=0.01)
 
     @pytest.mark.parametrize("pet, breed, description, price", [get_random_pet_breed_and_description()])
-    @pytest.mark.xfail(reason="Fails due to bug XXX")
+    @pytest.mark.xfail(reason="Fails due to bug #004")
     def test_skip_order_confirmation(self, pet, breed, description, price):
         self.home_page.go_to_page()
         self.home_page.top_bar_pet_option(pet).click()

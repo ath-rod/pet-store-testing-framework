@@ -20,10 +20,19 @@ class StoreWrapper(BaseWrapper):
         super().__init__(url_path='store')
         self.request = APIRequest()
 
-    def post_order(self, pet_id=None, payload=None) -> object:
+    def post_order(self, payload) -> object:
         url = f'{self.base_url}/order'
-        if payload is None:
-            payload = generate_order(pet_id)
+
+        response = self.request.post(url, dumps(payload), self.headers)
+        logger.info(f"POST ORDER: {pformat(response)}")
+
+        return Request(
+            self.headers, payload, response
+        )
+
+    def post_randomly_generated_order(self, pet_id) -> object:
+        url = f'{self.base_url}/order'
+        payload = generate_order(pet_id)
 
         response = self.request.post(url, dumps(payload), self.headers)
         logger.info(f"POST ORDER: {pformat(response)}")

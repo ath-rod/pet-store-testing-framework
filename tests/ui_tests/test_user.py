@@ -1,5 +1,5 @@
 import pytest
-from assertpy import assert_that
+from assertpy import assert_that, soft_assertions
 
 from base_class_test import UIBaseClassTest
 from core.custom_assertions import assert_that_element_is_present
@@ -9,7 +9,7 @@ from utils.get_data_set import PetSpecies
 
 
 class TestUser(UIBaseClassTest):
-    def test_add_new_user(self):  # TODO: add improvement in report to include success message
+    def test_add_new_user(self):  # See Improvement #001: include success message
         user_id = get_random_string()
         password = get_random_string()
         favorite_category = get_random_choice([pet.name for pet in PetSpecies])
@@ -36,14 +36,14 @@ class TestUser(UIBaseClassTest):
 
         assert_that_element_is_present(self.home_page.distinctive_home_page_element(), page=self.home_page)
 
-    def test_add_new_user_with_no_data(self):  # TODO: add improvement in report to include error message
+    def test_add_new_user_with_no_data(self):  # See Improvement #002: include success message
         self.sign_up_page.go_to_page()
         clear_user_and_account_info(self.sign_up_page)
         self.sign_up_page.save_account_button().click()
 
         assert_that_element_is_present(self.sign_up_page.save_account_button(), self.sign_up_page)
 
-    @pytest.mark.xfail(reason="Fails due to bug XXX")
+    @pytest.mark.xfail(reason="Fails due to bug #005")
     def test_add_new_user_with_no_account_information(self):
         self.sign_up_page.go_to_page()
         clear_user_and_account_info(self.sign_up_page)
@@ -55,6 +55,17 @@ class TestUser(UIBaseClassTest):
 
         #  TODO: update test assertions after bug is fixed
         assert_that_element_is_present(self.sign_up_page.save_account_button(), self.sign_up_page)
+
+    @pytest.mark.xfail(reason="Fails due to bug #008")
+    def test_add_new_user_password_is_censored(self):
+        self.sign_up_page.go_to_page()
+        clear_user_and_account_info(self.sign_up_page)
+        new_password_input_type = self.sign_up_page.password_input().get_element_type()
+        repeat_password_input_type = self.sign_up_page.repeat_password_input().get_element_type()
+
+        with soft_assertions():
+            assert_that(new_password_input_type).is_equal_to("password")
+            assert_that(repeat_password_input_type).is_equal_to("password")
 
     def test_sign_in_valid_user(self):
         user = self.random_user

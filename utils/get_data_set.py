@@ -55,7 +55,7 @@ def __get_available_pets():
             "Poodle": {"Male Puppy Poodle": 18.50},
             "Dalmation": {"Spotless Male Puppy Dalmation": 18.50, "Spotted Adult Female Dalmation": 18.50},
             "Golden Retriever": {"Adult Female Golden Retriever": 155.29},
-            #  TODO: add to report data for labrador retrievers is repeated, price to be confirmed
+            #  TODO: Update Labradors Data when Information is Updated (see Bug #007)
             "Labrador Retriever": {"Adult Male Labrador Retriever": "?", "Adult Female Labrador Retriever": "?"},
             "Chihuahua": {"Adult Male Chihuahua": 125.50, "Adult Female Chihuahua": 155.29}
         },

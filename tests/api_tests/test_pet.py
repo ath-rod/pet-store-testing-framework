@@ -11,7 +11,7 @@ from utils.get_schema import get_pet_schema
 wrapper = PetWrapper()
 
 
-@pytest.mark.skip(reason="Fails inconsistently due to Bug XXX")
+@pytest.mark.skip(reason="Fails inconsistently due to Bug #008")
 def test_add_pet():
     payload = {
         "category": {
@@ -44,7 +44,7 @@ def test_get_pet():
     assert_dicts_are_equal(request_new_pet.response.body_as_dict, response.body_as_dict)
 
 
-@pytest.mark.skip("Fails inconsistently due to Bug XXX")
+@pytest.mark.skip("Fails inconsistently due to Bug #008")
 def test_remove_pet():
     existing_pet = wrapper.post_pet()
     response = wrapper.delete_pet_by_id(existing_pet.response.body_as_dict['id'])
@@ -68,7 +68,7 @@ def test_modify_pet():
     assert_dicts_are_equal(response.body_as_dict, new_pet_data)
 
 
-@pytest.mark.xfail(reason="Fails due to bug 001")
+@pytest.mark.xfail(reason="Fails due to Bug #001")
 def test_add_empty_pet():
     request = wrapper.post_pet(payload={})
     with soft_assertions():
@@ -76,7 +76,7 @@ def test_add_empty_pet():
         assert_that(request.response.body_as_dict).does_not_contain_key('id')
 
 
-@pytest.mark.xfail(reason="Fails due to bug 002")
+@pytest.mark.xfail(reason="Fails due to Bug #002")
 def test_add_already_existing_pet():
     existing_pet = wrapper.post_pet()
     new_pet_data = generate_pet()
@@ -91,7 +91,7 @@ def test_add_already_existing_pet():
         assert_dicts_are_equal(existing_pet.response.body_as_dict, actual_pet.body_as_dict)
 
 
-@pytest.mark.xfail(reason="Fails due to bug 003")
+@pytest.mark.xfail(reason="Fails due to Bug #003")
 @pytest.mark.parametrize("invalid_status", random_data_generator.get_invalid_status_data(), ids=repr)
 def test_modify_pet_with_invalid_status(invalid_status):
     existing_pet = wrapper.post_pet()
